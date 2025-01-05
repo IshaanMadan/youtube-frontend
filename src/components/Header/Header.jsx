@@ -21,37 +21,14 @@ function Header() {
     };
 
     const toggleDropdown = async () => {
-        if (userInfo === null) {
-            const userResponse = await authService.userProfile();
-            console.log(userResponse)
-            // setUser(userResponse.data);
-            dispatch(addUserInfo(userResponse.data));
-            console.log(userResponse.data);
-        }
+          const userResponse = await authService.userProfile();
+          console.log(userResponse)
+          // setUser(userResponse.data);
+          dispatch(addUserInfo(userResponse.data));
+          console.log(userResponse.data);
         const dropdownMenu = document.getElementById("dropdown-menu");
         dropdownMenu.classList.toggle("hidden");
     };
-
-    //   useEffect(() => {
-    //     // if (localStorage.getItem('accessToken')) {
-    //     //   const accessToken = localStorage.getItem('accessToken')
-    //     //   const refreshToken = localStorage.getItem('refreshToken')
-    //     //   const user = localStorage.getItem('user')
-    //     //   const tokenExpiry = localStorage.getItem('tokenExpiry')
-    //     //   const userAvatar = localStorage.getItem('userAvatar')
-    //     //   dispatch(login({
-    //     //     accessToken: accessToken,
-    //     //     refreshToken: refreshToken,
-    //     //     user: user,
-    //     //     tokenExpiry: tokenExpiry,
-    //     //     userAvatar: userAvatar
-    //     //   }))
-    //     //   setLogin(true);
-    //     // }
-    //     // if (isAuthenticated) {
-    //     //   setLogin(true)
-    //     // }
-    //   }, []);
 
     return (
     <nav className="bg-gray-900 px-5 py-2 fixed w-full top z-10">

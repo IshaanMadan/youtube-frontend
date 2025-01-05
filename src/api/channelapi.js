@@ -13,6 +13,7 @@ class ChannelService {
     async getChannelDetails() {
         try {
             const response = await axiosInstance.get('/channels/get-channel-details')
+            console.log(response)
             return response.data;
         } catch (error) {
             return error.response.data;

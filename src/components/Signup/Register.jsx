@@ -32,8 +32,11 @@ const Register = () => {
         formData.append('fullname', userData.fullname)
         formData.append('username', userData.username)
         formData.append('email', userData.email)
-        formData.append('avatar', file)
         formData.append('password', userData.password)
+
+        if (file) {
+            formData.append('avatar', file)
+        }
         console.log("Form Data: " + formData)
 
         const data = await authService.register(formData)
@@ -46,11 +49,11 @@ const Register = () => {
 
     return (
         <>
-        {loading && 
+        {loading &&
             <div class="flex justify-center items-center mt-8 w-1/2 mx-auto py-3 rounded-3xl">
                 <div class="w-12 h-12 border-t-4 border-green-500 border-solid rounded-full animate-spin mx-auto"></div>
           </div>
-          
+
         }
         <div className="flex justify-center items-center h-screen">
             <form onSubmit={handleSubmit} className="bg-gray-800 w-1/3 shadow-md rounded px-8 pt-6 pb-8 mb-2">
@@ -126,15 +129,22 @@ const Register = () => {
                 </div>
                 <div className="mb-2">
                     <label className="block text-gray-500 text-sm font-bold mb-2" htmlFor="avatar">
-                    Avatar
+                    Avatar (Optional)
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 bg-gray-900 border-none mb-3 leading-tight focus:outline-none focus:shadow-outline"
                         id="avatar"
                         type="file"
                         name="avatar"
-                        onChange={(e) => setFile(e.target.files[0])}
-                        required
+                        onChange={(e) => {
+                          const file = e.target.files[0]
+                          console.log('file', file)
+                          if (file) {
+                            setFile(file)
+                          } else {
+                            setFile(null)
+                          }
+                        }}
                     />
                 </div>
                 <div className="flex items-center justify-between">
