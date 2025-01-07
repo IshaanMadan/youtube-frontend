@@ -2,35 +2,34 @@ import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { ChatComponent, Header, Home, About, Subscription, Video, Login, Register, VideoUpload, Channel, CreateChannel } from './components/index.js'
-import axiosInstance from './api/axios.js';
+import authService from './api/userapi.js'
 // import ChatComponent from './ChatComponent';
 
 function App() {
     const userStatus = useSelector(state => state.auth.status)
 
-    const [isChatOpen, setIsChatOpen] = useState(true);
+    // const [isChatOpen, setIsChatOpen] = useState(true);
     const [activeUser, setActiveUser] = useState(null);
     //const users = ['Alice', 'Bob', 'Charlie'];
     const [users, setUsers] = useState([])
 
     const handleUserClick = (user) => {
       setActiveUser(user);
-      setIsChatOpen(true);
     };
 
-    useEffect(() => {
-    const fetchUsers = async () => {
+    const getUsersList = async () => {
       try {
-        const res = await axiosInstance.get('/users/user-list');
+        const res = await authService.userList();
         console.log('Users: ', res.data);  // Use res.data to get the response body
-        setUsers(res.data.data)
+        setUsers(res.data)
       } catch (error) {
         console.error('Failed to fetch users', error);
       }
-    };
+    }
 
-    fetchUsers();
-    }, [])
+    useEffect(() => {
+      getUsersList();
+    }, [userStatus])
 
     return (
         <Router>
@@ -56,9 +55,9 @@ function App() {
                     )}
                 </Routes>
             </div>
-            {isChatOpen && (
+            {userStatus && (
                 <div className="fixed bottom-4 right-4 w-80 h-[500px] bg-gray-800 border border-gray-700 rounded-lg shadow-lg text-white">
-                  <div className="p-4 border-b border-gray-700 font-bold">Users</div>
+                  <div className="p-4 border-b border-gray-700 font-bold">Users For Chat</div>
                   <div className="p-4">
                     {users.map((user) => (
                       <div
@@ -67,7 +66,7 @@ function App() {
                         onClick={() => handleUserClick(user)}
                       >
                         <img
-                          src={user.avatar}
+                          src={user.avatar || '/userdefault.png'}
                           alt={user.fullname}
                           className="w-10 h-10 rounded-full mr-4"
                         />
